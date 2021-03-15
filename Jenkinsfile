@@ -18,10 +18,14 @@ pipeline {
                     for (def i=0; i< repositoriesSize; i++) {
                         try{
                           sh "microk8s.kubectl get svc ${repo[i][2]}"
-                          indexToDeploy = i
+                            if (i+1 == repositoriesSize){
+                                indexToDeploy = 0
+                            }else{
+                                indexToDeploy = i+1
+                            }
                           break
                         } catch (Exception x){
-                          echo "${repo[i][2]} is not deployed"
+                          echo "${repositories[i][2]} is not deployed"
                         }
                     }
                     imageName = repositories[i][2]
