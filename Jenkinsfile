@@ -2,6 +2,7 @@
 
 def imageName
 def repositories = [["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app1"], ["https://github.com/angelourian/simple-reactjs-app.git", "simple-reactjs-app", "app2"], ["https://github.com/Kornil/simple-react-app.git", "simple-reactjs-app", "app3"]]
+def indexToDeploy
 
 pipeline {
     agent any
@@ -28,8 +29,8 @@ pipeline {
                           echo "${repositories[i][2]} is not deployed"
                         }
                     }
-                    imageName = repositories[i][2]
-                    sh "git clone ${repositories[i][0]}"
+                    imageName = repositories[indexToDeploy][2]
+                    sh "git clone ${repositories[indexToDeploy][0]}"
                 }
             }
         }
@@ -39,7 +40,7 @@ pipeline {
                 script {
                     sh "git clone https://github.com/GastonKanze/react-app.git"
                     sh "cp react-app/Dockerfile simple-reactjs-app"
-                    dir("${repositories[i][1]}") {
+                    dir("${repositories[indexToDeploy][1]}") {
                         sh "docker build -t ${imageName}:${BUILD_NUMBER} ."
                     }
                 }
