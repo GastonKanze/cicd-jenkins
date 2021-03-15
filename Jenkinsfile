@@ -19,11 +19,13 @@ pipeline {
                     for (def i=0; i< repositoriesSize; i++) {
                         try{
                           sh "microk8s.kubectl get svc ${repo[i][2]}"
-                            if (i+1 == repositoriesSize){
-                                indexToDeploy = 0
-                            }else{
-                                indexToDeploy = i+1
-                            }
+                          sh "microk8s.kubectl delete svc ${repo[i][2]}"
+                          sh "microk8s.kubectl delete deployment ${repo[i][2]}"
+                          if (i+1 == repositoriesSize){
+                            indexToDeploy = 0
+                          }else{
+                            indexToDeploy = i+1
+                          }
                           break
                         } catch (Exception x){
                           echo "${repositories[i][2]} is not deployed"
@@ -38,8 +40,8 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    sh "git clone https://github.com/GastonKanze/react-app.git"
-                    sh "cp react-app/Dockerfile simple-reactjs-app"
+                    sh "git clone https://github.com/GastonKanze/cicd-jenkins.git"
+                    sh "cp cicd-jenkins/Dockerfile ${repositories[indexToDeploy][1]}"
                     dir("${repositories[indexToDeploy][1]}") {
                         sh "docker build -t ${imageName}:${BUILD_NUMBER} ."
                     }
