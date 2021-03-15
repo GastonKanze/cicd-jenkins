@@ -1,6 +1,7 @@
 #!/groovy
 
 def imageName
+def repositories = [["https://github.com/aditya-sridhar/simple-reactjs-app.git","app1"], ["https://github.com/angelourian/simple-reactjs-app.git", "app2"], ["https://github.com/Kornil/simple-react-app.git", "app3"]]
 
 pipeline {
     agent any
@@ -12,7 +13,8 @@ pipeline {
         stage('Pull code') {
             steps {
                 script {
-                    sh "git clone https://github.com/aditya-sridhar/simple-reactjs-app.git"
+                    imageName = repositories[0][1]
+                    sh "git clone ${repositories[0][0]}"
                 }
             }
         }
@@ -20,7 +22,6 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    imageName = "react-app"
                     sh "git clone https://github.com/GastonKanze/react-app.git"
                     sh "cp react-app/Dockerfile simple-reactjs-app"
                     dir("simple-reactjs-app") {
@@ -34,7 +35,7 @@ pipeline {
             steps {
                 script {
                     dockerHubRepo = "gastonkanze/${imageName}"
-                    withCredentials([usernamePassword(credentialsId: 'DOCKER-LOGIN', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER-ID', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                         sh "docker tag ${imageName}:${BUILD_NUMBER} ${dockerHubRepo}:${BUILD_NUMBER}"
                         sh "docker tag ${imageName}:${BUILD_NUMBER} ${dockerHubRepo}:latest"
