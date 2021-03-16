@@ -32,7 +32,7 @@ pipeline {
                         }
                     }
                     imageName = repositories[indexToDeploy][2]
-                    appPath = ${repositories[indexToDeploy][1]
+                    appPath = repositories[indexToDeploy][1]
                     sh "git clone ${repositories[indexToDeploy][0]}"
                 }
             }
