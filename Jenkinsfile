@@ -1,6 +1,7 @@
 #!/groovy
 
 def imageName
+def appPath
 def repositories = [["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app1"], ["https://github.com/angelourian/simple-reactjs-app.git", "simple-reactjs-app", "app2"], ["https://github.com/Kornil/simple-react-app.git", "simple-reactjs-app", "app3"]]
 def indexToDeploy
 
@@ -19,8 +20,7 @@ pipeline {
                     for (def i=0; i< repositoriesSize; i++) {
                         try{
                           sh "microk8s.kubectl get svc ${repo[i][2]}"
-                          sh "microk8s.kubectl delete svc ${repo[i][2]}"
-                          sh "microk8s.kubectl delete deployment ${repo[i][2]}"
+                          sh "helm delete --purge kube-helm"
                           if (i+1 == repositoriesSize){
                             indexToDeploy = 0
                           }else{
@@ -32,6 +32,7 @@ pipeline {
                         }
                     }
                     imageName = repositories[indexToDeploy][2]
+                    appPath = ${repositories[indexToDeploy][1]
                     sh "git clone ${repositories[indexToDeploy][0]}"
                 }
             }
@@ -41,8 +42,8 @@ pipeline {
             steps {
                 script {
                     sh "git clone https://github.com/GastonKanze/cicd-jenkins.git"
-                    sh "cp cicd-jenkins/Dockerfile ${repositories[indexToDeploy][1]}"
-                    dir("${repositories[indexToDeploy][1]}") {
+                    sh "cp cicd-jenkins/Dockerfile ${appPath}"
+                    dir("${appPath}") {
                         sh "docker build -t ${imageName}:${BUILD_NUMBER} ."
                     }
                 }
@@ -62,16 +63,20 @@ pipeline {
             }
         }
         
-        /*stage('Deploy to K8S') {
+        stage('Deploy to K8S') {
             steps {
                 script {
                     //USE HELM
-                    sh "microk8s.kubectl apply -f react-app/simple-react-app-service.yml"
+                    sh "git clone https://github.com/GastonKanze/cicd-jenkins-helmchart.git"
+                    dir("cicd-jenkins-helmchart"){
+                        sh "helm install kube-chart . --set appName=${imageName}"
+                    }
+                    //sh "microk8s.kubectl apply -f react-app/simple-react-app-service.yml"
                     echo "Service is pointing to the IP:"
                     sh "microk8s.kubectl get service/simple-react-app -o jsonpath='{.spec.clusterIP}'"
                 }
             }
-        }*/
+        }
         
     }
 
