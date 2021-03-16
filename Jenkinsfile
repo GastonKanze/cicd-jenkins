@@ -2,8 +2,7 @@
 
 def imageName
 def appPath
-//def repositories = [["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app1"], ["https://github.com/angelourian/simple-reactjs-app.git", "simple-reactjs-app", "app2"], ["https://github.com/Kornil/simple-react-app.git", "simple-reactjs-app", "app3"]]
-def repositories = [["https://github.com/Kornil/simple-react-app.git", "simple-react-app", "app1"], ["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app2"] ]
+def repositories = [["https://github.com/taniarascia/react-tutorial.git","react-tutorial","app1"],["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app2"] ]
 def indexToDeploy
 
 pipeline {
