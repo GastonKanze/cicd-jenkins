@@ -20,7 +20,7 @@ pipeline {
                     for (def i=0; i< repositoriesSize; i++) {
                         try{
                           sh "microk8s.kubectl get svc ${repo[i][2]}"
-                          sh "helm delete --purge kube-helm"
+                          sh "helm delete kube-chart"
                           if (i+1 == repositoriesSize){
                             indexToDeploy = 0
                           }else{
