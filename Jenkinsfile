@@ -66,6 +66,7 @@ pipeline {
         stage('Deploy to K8S') {
             steps {
                 script {
+                    sh "microk8s.kubectl config view > $HOME/.kube/config"
                     sh "git clone https://github.com/GastonKanze/cicd-jenkins-helmchart.git"
                     dir("cicd-jenkins-helmchart"){
                         sh "ls -l"
