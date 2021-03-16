@@ -71,9 +71,8 @@ pipeline {
                     dir("cicd-jenkins-helmchart"){
                         sh "helm upgrade --install kube-chart . --set appName=${imageName}"
                     }
-                    //sh "microk8s.kubectl apply -f react-app/simple-react-app-service.yml"
                     echo "Service is pointing to the IP:"
-                    sh "microk8s.kubectl get service/simple-react-app -o jsonpath='{.spec.clusterIP}'"
+                    sh "microk8s.kubectl get service/${imageName} -o jsonpath='{.spec.clusterIP}'"
                 }
             }
         }
