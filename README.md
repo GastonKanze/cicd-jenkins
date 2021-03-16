@@ -7,7 +7,7 @@ CICD Pipeline to deploy different applications, the process checks the app insta
 - In this CICD process you have these stages:
   - Pull the code of the next app in the list of apps. 
   - Build a docker image and upload the image to [Dockerhub](https://hub.docker.com/u/gastonkanze).
-  - Deploy to K8S using healmchart.
+  - Deploy to K8S using [healmchart](https://github.com/GastonKanze/cicd-jenkins-helmchart.git) .
 
 
 ## Screenshots: 
