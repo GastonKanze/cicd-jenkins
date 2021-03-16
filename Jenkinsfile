@@ -70,11 +70,11 @@ pipeline {
                     // Saving config
                     sh "microk8s.kubectl config view --raw > $HOME/.kube/config"
                     // Checking Helm repo
-                    try{
+                    /*try{
                        sh "helm repo list"
                     } catch(Exception x){
                        sh "helm repo add stable https://charts.helm.sh/stable"
-                    }
+                    }*/
                     // Cloning helm chart repository
                     sh "git clone https://github.com/GastonKanze/cicd-jenkins-helmchart.git"
                     dir("cicd-jenkins-helmchart"){
