@@ -66,10 +66,9 @@ pipeline {
         stage('Deploy to K8S') {
             steps {
                 script {
-                    //USE HELM
                     sh "git clone https://github.com/GastonKanze/cicd-jenkins-helmchart.git"
                     dir("cicd-jenkins-helmchart"){
-                        sh "helm install kube-chart . --set appName=${imageName}"
+                        sh "helm upgrade --install kube-chart . --set appName=${imageName}"
                     }
                     //sh "microk8s.kubectl apply -f react-app/simple-react-app-service.yml"
                     echo "Service is pointing to the IP:"
