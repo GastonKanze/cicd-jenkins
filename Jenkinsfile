@@ -2,6 +2,7 @@
 
 def imageName
 def appPath
+//Array of applications ["Repository", "Folder name", "Application name"]
 def repositories = [["https://github.com/taniarascia/react-tutorial.git","react-tutorial","app1"],["https://github.com/aditya-sridhar/simple-reactjs-app.git","simple-reactjs-app", "app2"] ]
 def indexToDeploy
 
@@ -66,9 +67,18 @@ pipeline {
         stage('Deploy to K8S') {
             steps {
                 script {
+                    // Saving config
                     sh "microk8s.kubectl config view --raw > $HOME/.kube/config"
+                    // Checking Helm repo
+                    try{
+                       sh "helm repo list"
+                    } catch(Exception x){
+                       sh "helm repo add stable https://charts.helm.sh/stable"
+                    }
+                    // Cloning helm chart repository
                     sh "git clone https://github.com/GastonKanze/cicd-jenkins-helmchart.git"
                     dir("cicd-jenkins-helmchart"){
+                        // Install application
                         sh "helm upgrade --install kube-chart . --set appName=${imageName}"
                     }
                     echo "Service is pointing to the IP:"
