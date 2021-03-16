@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     // Saving config
-                    sh "microk8s.kubectl config view --raw > $HOME/.kube/config"
+                    //sh "microk8s.kubectl config view --raw > $HOME/.kube/config"
                     // Checking Helm repo
                     /*try{
                        sh "helm repo list"
